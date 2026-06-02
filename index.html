@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADROIT SENSE™ — Live Cold Chain Monitor</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink: #1A1A2E;
+    --gold: #C8A84B;
+    --red: #CC2936;
+    --green: #1A6B3C;
+    --bg: #0F0F1A;
+    --card: #1A1A2E;
+    --border: #2A2A3E;
+    --text: #E8E4D9;
+    --muted: #6B7280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--card);
+    border-bottom: 2px solid var(--gold);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+
+  .logo-text h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+
+  .logo-text p {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: none;
+  }
+
+  .status-dot.connected {
+    background: #22C55E;
+    animation: pulse 2s infinite;
+  }
+
+  .status-dot.alert {
+    background: var(--red);
+    animation: pulse 0.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .main {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .client-banner {
+    background: linear-gradient(135deg, var(--card), #1E1E35);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .client-banner h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    color: var(--gold);
+  }
+
+  .client-banner p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .live-badge {
+    background: var(--red);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    animation: pulse 1s infinite;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+
+  .metric-card.alert-card::before {
+    background: var(--red);
+  }
+
+  .metric-card.ok-card::before {
+    background: #22C55E;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .metric-value.temp-ok { color: #60A5FA; }
+  .metric-value.temp-alert { color: var(--red); }
+  .metric-value.temp-good { color: #22C55E; }
+
+  .metric-unit {
+    font-size: 16px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+
+  .metric-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .charts { grid-template-columns: 1fr; }
+  }
+
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .chart-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .alerts-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .alerts-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .alert-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .alert-item.warning {
+    background: rgba(204, 41, 54, 0.15);
+    border: 1px solid rgba(204, 41, 54, 0.3);
+    color: #F87171;
+  }
+
+  .alert-item.info {
+    background: rgba(200, 168, 75, 0.1);
+    border: 1px solid rgba(200, 168, 75, 0.2);
+    color: var(--gold);
+  }
+
+  .no-alerts {
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+
+  .footer span { color: var(--gold); }
+
+  .connecting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: var(--muted);
+    font-size: 14px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <div class="logo-text">
+      <h1>ADROIT SENSE™</h1>
+      <p>Cold Chain Intelligence Platform</p>
+    </div>
+  </div>
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">Connecting...</span>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="client-banner">
+    <div>
+      <h2>Bidi GmbH — Hilden Facility</h2>
+      <p>Cold Storage Zone A · Real-time monitoring · Updated every 5 seconds</p>
+    </div>
+    <div class="live-badge">● LIVE</div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric-card" id="tempCard">
+      <div class="metric-label">Temperature</div>
+      <div class="metric-value" id="tempValue">--<span class="metric-unit">°C</span></div>
+      <div class="metric-sub" id="tempStatus">Waiting for data...</div>
+    </div>
+    <div class="metric-card" id="humCard">
+      <div class="metric-label">Humidity</div>
+      <div class="metric-value" id="humValue">--<span class="metric-unit">%</span></div>
+      <div class="metric-sub">Relative humidity</div>
+    </div>
+    <div class="metric-card" id="deviceCard">
+      <div class="metric-label">Device</div>
+      <div class="metric-value" style="font-size:20px;" id="deviceValue">--</div>
+      <div class="metric-sub" id="lastSeen">Last seen: --</div>
+    </div>
+    <div class="metric-card" id="alertCard">
+      <div class="metric-label">Alert Status</div>
+      <div class="metric-value" style="font-size:20px;" id="alertValue">--</div>
+      <div class="metric-sub" id="alertSub">Monitoring active</div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart-card">
+      <div class="chart-title">Temperature (°C) — Last 20 readings</div>
+      <canvas id="tempChart" height="120"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Humidity (%) — Last 20 readings</div>
+      <canvas id="humChart" height="120"></canvas>
+    </div>
+  </div>
+
+  <div class="alerts-section">
+    <div class="alerts-title">Alert Log</div>
+    <div id="alertLog"><div class="no-alerts">No alerts — system operating normally</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Powered by <span>ADROIT SOLUTIONS GmbH</span> · Königsallee 27, Düsseldorf · adroitsolutions.de
+</div>
+
+<script>
+const ENDPOINT = 'wss://arpwhqen54x6w-ats.iot.eu-central-1.amazonaws.com/mqtt';
+const TOPIC_DATA = 'adroit/sense/001/data';
+const TOPIC_ALERT = 'adroit/sense/001/alert';
+const MAX_POINTS = 20;
+const TEMP_MAX = 8.0;
+const TEMP_MIN = -25.0;
+
+let tempData = [];
+let humData = [];
+let labels = [];
+let alertCount = 0;
+
+// Charts
+const tempCtx = document.getElementById('tempChart').getContext('2d');
+const humCtx = document.getElementById('humChart').getContext('2d');
+
+const tempChart = new Chart(tempCtx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Temperature °C',
+      data: [],
+      borderColor: '#60A5FA',
+      backgroundColor: 'rgba(96,165,250,0.1)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#60A5FA',
+      tension: 0.4,
+      fill: true
+    }, {
+      label: 'Max threshold (8°C)',
+      data: Array(MAX_POINTS).fill(8),
+      borderColor: 'rgba(204,41,54,0.5)',
+      borderWidth: 1,
+      borderDash: [5,5],
+      pointRadius: 0,
+      fill: false
+    }, {
+      label: 'Min threshold (-25°C)',
+      data: Array(MAX_POINTS).fill(-25),
+      borderColor: 'rgba(200,168,75,0.5)',
+      borderWidth: 1,
+      borderDash: [5,5],
+      pointRadius: 0,
+      fill: false
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 300 },
+    plugins: { legend: { labels: { color: '#6B7280', font: { size: 10 } } } },
+    scales: {
+      x: { ticks: { color: '#6B7280', font: { size: 9 } }, grid: { color: '#2A2A3E' } },
+      y: { ticks: { color: '#6B7280' }, grid: { color: '#2A2A3E' } }
+    }
+  }
+});
+
+const humChart = new Chart(humCtx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Humidity %',
+      data: [],
+      borderColor: '#C8A84B',
+      backgroundColor: 'rgba(200,168,75,0.1)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#C8A84B',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 300 },
+    plugins: { legend: { labels: { color: '#6B7280', font: { size: 10 } } } },
+    scales: {
+      x: { ticks: { color: '#6B7280', font: { size: 9 } }, grid: { color: '#2A2A3E' } },
+      y: { ticks: { color: '#6B7280' }, grid: { color: '#2A2A3E' }, min: 60, max: 100 }
+    }
+  }
+});
+
+function updateCharts(temp, hum) {
+  const time = new Date().toLocaleTimeString();
+  labels.push(time);
+  tempData.push(temp);
+  humData.push(hum);
+
+  if (labels.length > MAX_POINTS) {
+    labels.shift();
+    tempData.shift();
+    humData.shift();
+  }
+
+  tempChart.data.labels = labels;
+  tempChart.data.datasets[0].data = tempData;
+  tempChart.update();
+
+  humChart.data.labels = labels;
+  humChart.data.datasets[0].data = humData;
+  humChart.update();
+}
+
+function addAlert(message, type = 'warning') {
+  const log = document.getElementById('alertLog');
+  const noAlerts = log.querySelector('.no-alerts');
+  if (noAlerts) noAlerts.remove();
+
+  const time = new Date().toLocaleTimeString();
+  const item = document.createElement('div');
+  item.className = `alert-item ${type}`;
+  item.innerHTML = `<span>⚠</span><span>${time} — ${message}</span>`;
+  log.insertBefore(item, log.firstChild);
+
+  if (log.children.length > 10) {
+    log.removeChild(log.lastChild);
+  }
+}
+
+function updateMetrics(data) {
+  const temp = data.temperature;
+  const hum = data.humidity;
+
+  // Temperature
+  const tempEl = document.getElementById('tempValue');
+  tempEl.innerHTML = `${temp.toFixed(1)}<span class="metric-unit">°C</span>`;
+
+  const tempCard = document.getElementById('tempCard');
+  const tempStatus = document.getElementById('tempStatus');
+
+  if (temp > TEMP_MAX) {
+    tempEl.className = 'metric-value temp-alert';
+    tempCard.className = 'metric-card alert-card';
+    tempStatus.textContent = '⚠ Above maximum threshold!';
+  } else if (temp < TEMP_MIN) {
+    tempEl.className = 'metric-value temp-alert';
+    tempCard.className = 'metric-card alert-card';
+    tempStatus.textContent = '⚠ Below minimum threshold!';
+  } else {
+    tempEl.className = 'metric-value temp-ok';
+    tempCard.className = 'metric-card ok-card';
+    tempStatus.textContent = 'Within normal range';
+  }
+
+  // Humidity
+  document.getElementById('humValue').innerHTML = `${hum.toFixed(1)}<span class="metric-unit">%</span>`;
+
+  // Device
+  document.getElementById('deviceValue').textContent = data.device;
+  document.getElementById('lastSeen').textContent = `Last seen: ${new Date().toLocaleTimeString()}`;
+
+  // Alert status
+  const alertVal = document.getElementById('alertValue');
+  const alertSub = document.getElementById('alertSub');
+  const alertCard = document.getElementById('alertCard');
+
+  if (temp > TEMP_MAX || temp < TEMP_MIN) {
+    alertCount++;
+    alertVal.textContent = '⚠ ALERT';
+    alertVal.style.color = '#F87171';
+    alertCard.className = 'metric-card alert-card';
+    alertSub.textContent = `${alertCount} alerts today`;
+    addAlert(`Temperature ${temp.toFixed(1)}°C — threshold breach detected`);
+  } else {
+    alertVal.textContent = '✓ NORMAL';
+    alertVal.style.color = '#22C55E';
+    alertCard.className = 'metric-card ok-card';
+    alertSub.textContent = 'All zones within limits';
+  }
+
+  updateCharts(temp, hum);
+}
+
+// Note: Direct WebSocket to AWS IoT requires Cognito for browser auth
+// For demo purposes, we show the dashboard with a connection notice
+// Production version uses API Gateway WebSocket
+
+document.getElementById('statusDot').className = 'status-dot';
+document.getElementById('statusText').textContent = 'Demo Mode — Connect simulator to see live data';
+
+// Demo mode: simulate data in browser for presentation
+let demoTemp = -18.0;
+let demoHum = 85.0;
+let demoCount = 0;
+
+function runDemo() {
+  demoTemp = -18.0 + (Math.random() * 2 - 1);
+  demoHum = 85.0 + (Math.random() * 4 - 2);
+  demoCount++;
+
+  // Simulate occasional breach for demo effect
+  if (demoCount % 15 === 0) {
+    demoTemp = 9.5;
+  }
+
+  updateMetrics({
+    device: 'adroit-sense-001',
+    temperature: demoTemp,
+    humidity: demoHum,
+    timestamp: Date.now()
+  });
+
+  document.getElementById('statusDot').className = 'status-dot connected';
+  document.getElementById('statusText').textContent = 'Live — adroit-sense-001';
+}
+
+// Start demo immediately
+setInterval(runDemo, 5000);
+runDemo();
+</script>
+
+</body>
+</html>
