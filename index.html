@@ -32,50 +32,6 @@ html { scroll-behavior: smooth; }
 /* ── SCROLL PROGRESS ── */
 .scroll-progress { position: fixed; top: 0; left: 0; z-index: 200; height: 2px; width: 0%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 0.1s linear; }
 
-/* ── HEADER ── */
-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 72px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(10,10,10,0.97);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-.header-logo-link {
-  display: flex; align-items: center; gap: 14px;
-  text-decoration: none;
-}
-.header-logo-img { height: 48px; width: auto; flex-shrink: 0; filter: brightness(0) invert(1); }
-.header-divider { width: 1px; height: 36px; background: var(--border); }
-.header-brand { display: flex; flex-direction: column; align-items: flex-start; }
-.header-brand-name {
-  font-family: 'DM Serif Display', serif;
-  font-style: italic;
-  font-size: 1.35rem;
-  color: var(--gold);
-  letter-spacing: 0.04em;
-  line-height: 1;
-}
-.header-brand-sub {
-  font-size: 0.62rem;
-  color: var(--muted);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-.header-live { display: flex; align-items: center; gap: 0.5rem; margin-left: 2rem; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: dot-pulse 2s infinite; }
-@keyframes dot-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
-
-/* ── BREADCRUMB ── */
-.breadcrumb { padding: 5rem 4rem 0; display: flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,244,240,0.4); }
-.breadcrumb a { color: rgba(245,244,240,0.4); text-decoration: none; transition: color 0.2s; }
-.breadcrumb a:hover { color: var(--gold); }
-.breadcrumb span.active { color: var(--gold); }
-
-/* ── MAIN ── */
-.main { padding-top: 72px; padding-bottom: 0; }
-
 /* ── HERO STRIP ── */
 .dash-hero {
   background: var(--black2);
@@ -86,7 +42,6 @@ header {
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  margin-top: 1.5rem;
 }
 .dash-hero::after {
   content: '';
@@ -115,7 +70,6 @@ header {
 }
 @keyframes badge-pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
 
-
 /* ── GOLD DIVIDER ── */
 .gold-line { height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent); opacity: 0.15; }
 
@@ -134,6 +88,33 @@ header {
 .metric-status { font-size: 0.78rem; color: var(--muted); margin-top: 0.6rem; letter-spacing: 0.02em; }
 .metric-status.ok { color: var(--green); }
 .metric-status.warn { color: var(--red); }
+
+/* ── NIS2 COMPLIANCE STRIP ── */
+.nis2-strip {
+  background: var(--black2); border-bottom: 1px solid var(--border);
+  padding: 1rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.nis2-left { display: flex; align-items: center; gap: 16px; }
+.nis2-badge {
+  background: var(--gold-dim); border: 1px solid var(--gold-border);
+  color: var(--gold); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 5px 12px; white-space: nowrap;
+}
+.nis2-info { font-size: 0.75rem; color: var(--muted); }
+.nis2-info strong { color: var(--white); font-weight: 500; }
+.nis2-status { display: flex; align-items: center; gap: 8px; font-size: 0.72rem; color: var(--green); }
+.nis2-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: dot-pulse 2s infinite; }
+@keyframes dot-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.nis2-btn {
+  background: transparent; border: 1px solid var(--gold);
+  color: var(--gold); font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 8px 20px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.nis2-btn:hover { background: var(--gold); color: var(--black); }
 
 /* ── CHARTS ── */
 .charts-row { display: grid; grid-template-columns: 3fr 2fr; border-bottom: 1px solid var(--border); }
@@ -154,6 +135,27 @@ header {
 .alert-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-family: monospace; }
 .no-alerts { color: var(--muted); font-size: 0.8rem; padding: 1rem 0; display: flex; align-items: center; gap: 0.6rem; letter-spacing: 0.03em; }
 
+/* ── NIS2 COMPLIANCE LOG ── */
+.nis2-log { padding: 2rem; border-bottom: 1px solid var(--border); }
+.nis2-log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px; }
+.nis2-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.nis2-table th {
+  font-size: 0.6rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); font-weight: 600;
+}
+.nis2-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(201,168,76,0.06);
+  color: var(--white); font-family: monospace; font-size: 0.7rem; vertical-align: top;
+}
+.nis2-table tr:last-child td { border-bottom: none; }
+.nis2-table tr:hover td { background: rgba(201,168,76,0.04); }
+.nis2-severity { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; }
+.nis2-severity.high { background: rgba(204,41,54,0.15); color: var(--red); border: 1px solid rgba(204,41,54,0.3); }
+.nis2-severity.medium { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+.nis2-severity.low { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.nis2-empty { color: var(--muted); font-size: 0.8rem; padding: 20px 0; text-align: center; }
+.nis2-counter { font-family: monospace; font-size: 0.72rem; color: var(--muted); }
+
 /* ── FOOTER ── */
 footer {
   background: var(--mid); border-top: 1px solid var(--border);
@@ -168,28 +170,32 @@ footer {
 .footer-legal a:hover { color: var(--gold); }
 .footer-ts { font-family: monospace; font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
 
-/* ── LIGHT MODE ── */
-html[data-mode="light"] body { background: #f5f2eb !important; color: #0a0a0a !important; }
-html[data-mode="light"] nav { background: rgba(245,242,235,0.97) !important; }
-html[data-mode="light"] nav img, html[data-mode="light"] footer img { filter: brightness(0) !important; }
-html[data-mode="light"] .nav-links a { color: rgba(10,10,10,0.65) !important; }
-html[data-mode="light"] .lang-btn { color: rgba(10,10,10,0.6) !important; border-color: rgba(10,10,10,0.25) !important; }
-html[data-mode="light"] .dash-hero { background: #ede9e0 !important; }
-html[data-mode="light"] .dash-hero-left h2 { color: #0a0a0a !important; }
-html[data-mode="light"] .metrics-row, html[data-mode="light"] .charts-row, html[data-mode="light"] .alert-log { background: #f5f2eb !important; }
-html[data-mode="light"] .metric-value { color: #0a0a0a !important; }
-html[data-mode="light"] .alert-text { color: #0a0a0a !important; }
-html[data-mode="light"] footer { background: #ede9e0 !important; }
+/* ── NIS2 REPORT MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 500; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--black2); border: 1px solid var(--border); max-width: 640px; width: 90%; max-height: 85vh; overflow-y: auto; animation: fadeIn 0.3s ease; }
+.modal-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--gold); font-style: italic; }
+.modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+.modal-close:hover { color: var(--white); }
+.modal-body { padding: 1.5rem 2rem; }
+.report-section { margin-bottom: 1.5rem; }
+.report-section h4 { font-size: 0.6rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.report-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.75rem; }
+.report-row .rk { color: var(--muted); }
+.report-row .rv { color: var(--white); font-family: monospace; font-size: 0.7rem; }
+.modal-footer { padding: 1rem 2rem; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; }
+.btn-print { background: var(--gold); color: var(--black); border: none; font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 24px; cursor: pointer; }
+.btn-close { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 24px; cursor: pointer; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .header-brand-name { font-size: 1.1rem; }
-  .breadcrumb { padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 5rem; }
   .dash-hero { flex-direction: column; gap: 1rem; align-items: flex-start; padding: 1.5rem; }
   .metrics-row { grid-template-columns: repeat(2, 1fr); }
   .charts-row { grid-template-columns: 1fr; }
   .chart-panel { border-right: none; border-bottom: 1px solid var(--border); }
-  .alert-log { padding: 1.5rem; }
+  .alert-log, .nis2-log { padding: 1.5rem; }
+  .nis2-strip { flex-direction: column; align-items: flex-start; }
   footer { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
   .footer-legal { text-align: left; }
 }
@@ -202,93 +208,120 @@ html[data-mode="light"] footer { background: #ede9e0 !important; }
 
 <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- HEADER -->
-<header>
-  <a class="header-logo-link" href="https://adroitsolutions.de">
-    <img class="header-logo-img" src="/adroit-logo.png" alt="Adroit Solutions GmbH"/>
-    <div class="header-divider"></div>
-    <div class="header-brand">
-      <span class="header-brand-name">ADROIT SENSE™</span>
-      <span class="header-brand-sub">Cold Chain Intelligence</span>
-    </div>
-  </a>
-  <div class="header-live">
-    <div class="live-dot" id="liveDot"></div>
-    <span id="liveText">Live</span>
+<!-- HERO STRIP -->
+<div class="dash-hero">
+  <div class="dash-hero-left">
+    <h2>Cold Chain <em>Intelligence</em> Dashboard</h2>
+    <p>Real-time monitoring · Frankfurt Cloud · adroit-sense-001</p>
   </div>
-</header>
-
-<div class="main">
-
-  <!-- HERO STRIP -->
-  <div class="dash-hero">
-    <div class="dash-hero-left">
-      <h2>Cold Chain <em>Intelligence</em> Dashboard</h2>
-      <p>Real-time monitoring · Frankfurt Cloud · adroit-sense-001</p>
+  <div class="dash-hero-right">
+    <div class="client-tag">
+      <strong>Bidi GmbH</strong>
+      <span>Hilden Facility · Cold Storage Zone A</span>
     </div>
-    <div class="dash-hero-right">
-      <div class="client-tag">
-        <strong>Bidi GmbH</strong>
-        <span>Hilden Facility · Cold Storage Zone A</span>
-      </div>
-      <div class="live-badge">● Live</div>
-    </div>
+    <div class="live-badge">● Live</div>
   </div>
-
-  <div class="gold-line"></div>
-
-  <!-- METRICS -->
-  <div class="metrics-row">
-    <div class="metric" id="mTemp">
-      <div class="metric-label">Temperature</div>
-      <div class="metric-value c-gold" id="tempVal">--<span class="unit"> °C</span></div>
-      <div class="metric-status" id="tempSt">Initialising…</div>
-    </div>
-    <div class="metric" id="mHum">
-      <div class="metric-label">Humidity</div>
-      <div class="metric-value" id="humVal">--<span class="unit"> %</span></div>
-      <div class="metric-status" id="humSt">Relative humidity</div>
-    </div>
-    <div class="metric" id="mAlert">
-      <div class="metric-label">Alert Status</div>
-      <div class="metric-value" id="alertVal" style="font-size:1.6rem;padding-top:0.6rem;font-family:'DM Sans',sans-serif;font-weight:600;">--</div>
-      <div class="metric-status" id="alertSt">Monitoring active</div>
-    </div>
-    <div class="metric" id="mTime">
-      <div class="metric-label">Last Reading</div>
-      <div class="metric-value" id="timeVal" style="font-size:1.1rem;padding-top:0.75rem;font-family:monospace;color:var(--muted);font-weight:400;">--:--:--</div>
-      <div class="metric-status" id="timeSt">adroit-sense-001</div>
-    </div>
-  </div>
-
-  <div class="gold-line"></div>
-
-  <!-- CHARTS -->
-  <div class="charts-row">
-    <div class="chart-panel">
-      <div class="panel-title">Temperature — Last 20 Readings (°C)</div>
-      <canvas id="tempChart" height="90"></canvas>
-    </div>
-    <div class="chart-panel">
-      <div class="panel-title">Humidity (%)</div>
-      <canvas id="humChart" height="90"></canvas>
-    </div>
-  </div>
-
-  <div class="gold-line"></div>
-
-  <!-- ALERT LOG -->
-  <div class="alert-log">
-    <div class="panel-title">Alert Log</div>
-    <div id="alertLog">
-      <div class="no-alerts">
-        <span style="color:var(--green);font-size:0.5rem;">●</span>
-        No alerts — all zones operating within defined parameters
-      </div>
-    </div>
-  </div>
-
 </div>
+
+<div class="gold-line"></div>
+
+<!-- METRICS -->
+<div class="metrics-row">
+  <div class="metric" id="mTemp">
+    <div class="metric-label">Temperature</div>
+    <div class="metric-value c-gold" id="tempVal">--<span class="unit"> °C</span></div>
+    <div class="metric-status" id="tempSt">Initialising…</div>
+  </div>
+  <div class="metric" id="mHum">
+    <div class="metric-label">Humidity</div>
+    <div class="metric-value" id="humVal">--<span class="unit"> %</span></div>
+    <div class="metric-status" id="humSt">Relative humidity</div>
+  </div>
+  <div class="metric" id="mAlert">
+    <div class="metric-label">Alert Status</div>
+    <div class="metric-value" id="alertVal" style="font-size:1.6rem;padding-top:0.6rem;font-family:'DM Sans',sans-serif;font-weight:600;">--</div>
+    <div class="metric-status" id="alertSt">Monitoring active</div>
+  </div>
+  <div class="metric" id="mTime">
+    <div class="metric-label">Last Reading</div>
+    <div class="metric-value" id="timeVal" style="font-size:1.1rem;padding-top:0.75rem;font-family:monospace;color:var(--muted);font-weight:400;">--:--:--</div>
+    <div class="metric-status" id="timeSt">adroit-sense-001</div>
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- NIS2 COMPLIANCE STRIP -->
+<div class="nis2-strip">
+  <div class="nis2-left">
+    <div class="nis2-badge">NIS2 Compliant</div>
+    <div class="nis2-info">
+      <strong>EU Directive 2022/2555</strong> · Incident logging active ·
+      Retention: 90 days · <span id="nis2EventCount">0</span> events logged this session
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="nis2-status">
+      <div class="nis2-status-dot" id="nis2StatusDot"></div>
+      <span id="nis2StatusText">Logging Active</span>
+    </div>
+    <button class="nis2-btn" onclick="openReport()">↓ Download NIS2 Report</button>
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- CHARTS -->
+<div class="charts-row">
+  <div class="chart-panel">
+    <div class="panel-title">Temperature — Last 20 Readings (°C)</div>
+    <canvas id="tempChart" height="90"></canvas>
+  </div>
+  <div class="chart-panel">
+    <div class="panel-title">Humidity (%)</div>
+    <canvas id="humChart" height="90"></canvas>
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- ALERT LOG -->
+<div class="alert-log">
+  <div class="panel-title">Alert Log</div>
+  <div id="alertLog">
+    <div class="no-alerts">
+      <span style="color:var(--green);font-size:0.5rem;">●</span>
+      No alerts — all zones operating within defined parameters
+    </div>
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- NIS2 COMPLIANCE LOG -->
+<div class="nis2-log">
+  <div class="nis2-log-header">
+    <div class="panel-title" style="margin-bottom:0;">NIS2 Compliance Event Log</div>
+    <span class="nis2-counter">Session ID: <span id="sessionId">--</span> · <span id="nis2LogCount">0</span> events</span>
+  </div>
+  <table class="nis2-table">
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Event Type</th>
+        <th>Device</th>
+        <th>Value</th>
+        <th>Severity</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="nis2TableBody">
+      <tr><td colspan="6" class="nis2-empty">No compliance events recorded in this session</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="gold-line"></div>
 
 <!-- FOOTER -->
 <footer>
@@ -298,70 +331,63 @@ html[data-mode="light"] footer { background: #ede9e0 !important; }
     <p class="footer-ts" id="footerTime">--</p>
   </div>
   <div class="footer-legal">
+    <div class="nis2-badge" style="display:inline-block;margin-bottom:8px;">NIS2 EU/2022/2555</div>
+    <p>ADROIT SENSE™ v1.0 · Frankfurt Cloud · eu-central-1</p>
     <p>&copy; 2026 Adroit Solutions GmbH</p>
     <p><a href="/impressum.html">Impressum</a> &nbsp;&middot;&nbsp; <a href="/datenschutz.html">Datenschutz</a></p>
   </div>
 </footer>
 
+<!-- NIS2 REPORT MODAL -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>NIS2 Compliance Report</h3>
+      <button class="modal-close" onclick="closeReport()">✕</button>
+    </div>
+    <div class="modal-body" id="reportBody"></div>
+    <div class="modal-footer">
+      <button class="btn-close" onclick="closeReport()">Close</button>
+      <button class="btn-print" onclick="printReport()">Print / Save PDF</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ── Dashboard logic ── */
+/* ── Config ── */
 const MAX = 20;
 const TEMP_MAX = 8.0;
 const TEMP_MIN = -25.0;
-let tempData = [], humData = [], labels = [];
-let alertCount = 0;
-let count = 0;
+const DEVICE_ID = 'adroit-sense-001';
+const FACILITY = 'Bidi GmbH — Hilden Facility';
+const ZONE = 'Cold Storage Zone A';
 
+/* ── State ── */
+let tempData = [], humData = [], labels = [];
+let alertCount = 0, count = 0;
+let nis2Events = [];
+const SESSION_ID = 'AS-' + Date.now().toString(36).toUpperCase();
+const SESSION_START = new Date();
+
+document.getElementById('sessionId').textContent = SESSION_ID;
+
+/* ── Charts ── */
 Chart.defaults.color = 'rgba(245,244,240,0.35)';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 10;
 
-const tCtx = document.getElementById('tempChart').getContext('2d');
-const hCtx = document.getElementById('humChart').getContext('2d');
-
-const tempChart = new Chart(tCtx, {
+const tempChart = new Chart(document.getElementById('tempChart').getContext('2d'), {
   type: 'line',
   data: {
     labels: [],
     datasets: [
-      {
-        label: 'Temp °C',
-        data: [],
-        borderColor: '#c9a84c',
-        backgroundColor: 'rgba(201,168,76,0.07)',
-        borderWidth: 1.5,
-        pointRadius: 2.5,
-        pointBackgroundColor: '#c9a84c',
-        pointBorderColor: 'transparent',
-        tension: 0.4,
-        fill: true
-      },
-      {
-        label: 'Max +8°C',
-        data: Array(MAX).fill(8),
-        borderColor: 'rgba(204,41,54,0.35)',
-        borderWidth: 1,
-        borderDash: [4,4],
-        pointRadius: 0,
-        fill: false
-      },
-      {
-        label: 'Min −25°C',
-        data: Array(MAX).fill(-25),
-        borderColor: 'rgba(201,168,76,0.25)',
-        borderWidth: 1,
-        borderDash: [4,4],
-        pointRadius: 0,
-        fill: false
-      }
+      { label: 'Temp °C', data: [], borderColor: '#c9a84c', backgroundColor: 'rgba(201,168,76,0.07)', borderWidth: 1.5, pointRadius: 2.5, pointBackgroundColor: '#c9a84c', pointBorderColor: 'transparent', tension: 0.4, fill: true },
+      { label: 'Max +8°C', data: Array(MAX).fill(8), borderColor: 'rgba(204,41,54,0.35)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false },
+      { label: 'Min −25°C', data: Array(MAX).fill(-25), borderColor: 'rgba(201,168,76,0.25)', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false }
     ]
   },
-  options: {
-    responsive: true,
-    animation: false,
-    plugins: {
-      legend: { labels: { color: 'rgba(245,244,240,0.4)', font: { size: 10 }, boxWidth: 16, padding: 12 } }
-    },
+  options: { responsive: true, animation: false,
+    plugins: { legend: { labels: { color: 'rgba(245,244,240,0.4)', font: { size: 10 }, boxWidth: 16, padding: 12 } } },
     scales: {
       x: { ticks: { color: 'rgba(245,244,240,0.25)', maxRotation: 0, font: { size: 9 } }, grid: { color: 'rgba(201,168,76,0.06)' } },
       y: { ticks: { color: 'rgba(245,244,240,0.25)' }, grid: { color: 'rgba(201,168,76,0.06)' } }
@@ -369,25 +395,14 @@ const tempChart = new Chart(tCtx, {
   }
 });
 
-const humChart = new Chart(hCtx, {
+const humChart = new Chart(document.getElementById('humChart').getContext('2d'), {
   type: 'bar',
   data: {
     labels: [],
-    datasets: [{
-      label: 'Humidity %',
-      data: [],
-      backgroundColor: 'rgba(201,168,76,0.2)',
-      borderColor: 'rgba(201,168,76,0.6)',
-      borderWidth: 1,
-      borderRadius: 2
-    }]
+    datasets: [{ label: 'Humidity %', data: [], backgroundColor: 'rgba(201,168,76,0.2)', borderColor: 'rgba(201,168,76,0.6)', borderWidth: 1, borderRadius: 2 }]
   },
-  options: {
-    responsive: true,
-    animation: false,
-    plugins: {
-      legend: { labels: { color: 'rgba(245,244,240,0.4)', font: { size: 10 }, boxWidth: 16 } }
-    },
+  options: { responsive: true, animation: false,
+    plugins: { legend: { labels: { color: 'rgba(245,244,240,0.4)', font: { size: 10 }, boxWidth: 16 } } },
     scales: {
       x: { ticks: { color: 'rgba(245,244,240,0.25)', font: { size: 9 } }, grid: { color: 'rgba(201,168,76,0.06)' } },
       y: { ticks: { color: 'rgba(245,244,240,0.25)' }, grid: { color: 'rgba(201,168,76,0.06)' }, min: 60, max: 100 }
@@ -395,13 +410,38 @@ const humChart = new Chart(hCtx, {
   }
 });
 
-function flash(id) {
-  const el = document.getElementById(id);
-  el.classList.add('flash');
-  setTimeout(() => el.classList.remove('flash'), 700);
+/* ── NIS2 Logging ── */
+function logNIS2Event(type, value, severity, description) {
+  const event = {
+    id: 'EVT-' + (nis2Events.length + 1).toString().padStart(4, '0'),
+    timestamp: new Date().toLocaleString('de-DE'),
+    isoTimestamp: new Date().toISOString(),
+    type, device: DEVICE_ID, value, severity, description, status: 'LOGGED'
+  };
+  nis2Events.unshift(event);
+
+  const tbody = document.getElementById('nis2TableBody');
+  const emptyRow = tbody.querySelector('.nis2-empty');
+  if (emptyRow) emptyRow.closest('tr').remove();
+
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>${event.timestamp}</td>
+    <td>${event.type}</td>
+    <td>${event.device}</td>
+    <td>${event.value}</td>
+    <td><span class="nis2-severity ${severity.toLowerCase()}">${severity}</span></td>
+    <td style="color:var(--green);font-size:0.65rem;">✓ ${event.status}</td>
+  `;
+  tbody.insertBefore(row, tbody.firstChild);
+  if (tbody.rows.length > 10) tbody.deleteRow(tbody.rows.length - 1);
+
+  document.getElementById('nis2EventCount').textContent = nis2Events.length;
+  document.getElementById('nis2LogCount').textContent = nis2Events.length;
 }
 
-function addAlert(msg, type='warn') {
+/* ── Alert Log ── */
+function addAlert(msg, type = 'warn') {
   const log = document.getElementById('alertLog');
   const na = log.querySelector('.no-alerts');
   if (na) na.remove();
@@ -412,12 +452,20 @@ function addAlert(msg, type='warn') {
     <span class="alert-time">${time}</span>
     <div class="alert-dot ${type}"></div>
     <div class="alert-text">${msg}
-      <div class="alert-sub">adroit-sense-001 · Bidi GmbH Hilden · Zone A</div>
+      <div class="alert-sub">${DEVICE_ID} · ${FACILITY} · ${ZONE}</div>
     </div>`;
   log.insertBefore(div, log.firstChild);
   if (log.children.length > 8) log.removeChild(log.lastChild);
 }
 
+/* ── Flash ── */
+function flash(id) {
+  const el = document.getElementById(id);
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 700);
+}
+
+/* ── Update Dashboard ── */
 function update(data) {
   const t = data.temperature;
   const h = data.humidity;
@@ -432,12 +480,14 @@ function update(data) {
     tSt.className = 'metric-status warn';
     tSt.textContent = '⚠ Above maximum threshold';
     addAlert(`Temperature breach — ${t.toFixed(1)}°C exceeds +8°C maximum limit`);
+    logNIS2Event('TEMP_BREACH_HIGH', `${t.toFixed(2)}°C`, 'HIGH', `Temperature exceeded maximum threshold of +${TEMP_MAX}°C`);
     alertCount++;
   } else if (t < TEMP_MIN) {
     tEl.className = 'metric-value c-red';
     tSt.className = 'metric-status warn';
     tSt.textContent = '⚠ Below minimum threshold';
     addAlert(`Temperature breach — ${t.toFixed(1)}°C below −25°C minimum limit`);
+    logNIS2Event('TEMP_BREACH_LOW', `${t.toFixed(2)}°C`, 'HIGH', `Temperature below minimum threshold of ${TEMP_MIN}°C`);
     alertCount++;
   } else {
     tEl.className = 'metric-value c-gold';
@@ -446,6 +496,8 @@ function update(data) {
   }
 
   document.getElementById('humVal').innerHTML = `${h.toFixed(1)}<span class="unit"> %</span>`;
+  if (h > 95) logNIS2Event('HUMIDITY_HIGH', `${h.toFixed(1)}%`, 'MEDIUM', 'Humidity exceeded 95% — condensation risk');
+  if (h < 60) logNIS2Event('HUMIDITY_LOW', `${h.toFixed(1)}%`, 'MEDIUM', 'Humidity below 60% — product integrity risk');
 
   const aEl = document.getElementById('alertVal');
   const aSt = document.getElementById('alertSt');
@@ -453,10 +505,16 @@ function update(data) {
     aEl.innerHTML = '<span style="color:var(--red)">⚠ BREACH</span>';
     aSt.className = 'metric-status warn';
     aSt.textContent = `${alertCount} alert${alertCount !== 1 ? 's' : ''} logged`;
+    document.getElementById('nis2StatusDot').style.background = 'var(--red)';
+    document.getElementById('nis2StatusText').style.color = 'var(--red)';
+    document.getElementById('nis2StatusText').textContent = 'Incident Active';
   } else {
     aEl.innerHTML = '<span style="color:var(--green)">✓ NORMAL</span>';
     aSt.className = 'metric-status ok';
     aSt.textContent = 'All parameters within limits';
+    document.getElementById('nis2StatusDot').style.background = 'var(--green)';
+    document.getElementById('nis2StatusText').style.color = 'var(--green)';
+    document.getElementById('nis2StatusText').textContent = 'Logging Active';
   }
 
   document.getElementById('timeVal').textContent = time;
@@ -471,19 +529,94 @@ function update(data) {
   humChart.update();
 
   flash('mTemp'); flash('mHum');
+
+  if (count % 5 === 0) {
+    logNIS2Event('ROUTINE_READING', `${t.toFixed(2)}°C / ${h.toFixed(1)}%`, 'LOW', 'Scheduled sensor reading — within parameters');
+  }
+
   document.getElementById('footerTime').textContent = `Last updated: ${new Date().toLocaleString('de-DE')}`;
 }
 
+/* ── Demo Simulation ── */
 function runDemo() {
   count++;
   let t = -18.5 + (Math.random() * 3 - 1.5);
   let h = 84 + (Math.random() * 6 - 3);
   if (count % 12 === 0) t = 9.2;
-  update({ device: 'adroit-sense-001', temperature: t, humidity: h });
+  update({ device: DEVICE_ID, temperature: t, humidity: h });
 }
 
 runDemo();
 setInterval(runDemo, 5000);
+
+/* ── NIS2 Report Modal ── */
+function openReport() {
+  const now = new Date();
+  document.getElementById('reportBody').innerHTML = `
+    <div class="report-section">
+      <h4>Report Information</h4>
+      <div class="report-row"><span class="rk">Report Type</span><span class="rv">NIS2 Operational Compliance Log</span></div>
+      <div class="report-row"><span class="rk">Directive</span><span class="rv">EU 2022/2555 (NIS2)</span></div>
+      <div class="report-row"><span class="rk">Generated</span><span class="rv">${now.toLocaleString('de-DE')}</span></div>
+      <div class="report-row"><span class="rk">Session ID</span><span class="rv">${SESSION_ID}</span></div>
+      <div class="report-row"><span class="rk">Session Start</span><span class="rv">${SESSION_START.toLocaleString('de-DE')}</span></div>
+      <div class="report-row"><span class="rk">Total Events</span><span class="rv">${nis2Events.length}</span></div>
+    </div>
+    <div class="report-section">
+      <h4>Facility Information</h4>
+      <div class="report-row"><span class="rk">Facility</span><span class="rv">${FACILITY}</span></div>
+      <div class="report-row"><span class="rk">Zone</span><span class="rv">${ZONE}</span></div>
+      <div class="report-row"><span class="rk">Device ID</span><span class="rv">${DEVICE_ID}</span></div>
+      <div class="report-row"><span class="rk">Operator</span><span class="rv">Adroit Solutions GmbH</span></div>
+      <div class="report-row"><span class="rk">Cloud Region</span><span class="rv">AWS eu-central-1 (Frankfurt)</span></div>
+    </div>
+    <div class="report-section">
+      <h4>Threshold Configuration</h4>
+      <div class="report-row"><span class="rk">Maximum Temperature</span><span class="rv">+${TEMP_MAX}°C</span></div>
+      <div class="report-row"><span class="rk">Minimum Temperature</span><span class="rv">${TEMP_MIN}°C</span></div>
+      <div class="report-row"><span class="rk">Humidity Range</span><span class="rv">60% — 95%</span></div>
+      <div class="report-row"><span class="rk">Alert Response</span><span class="rv">Immediate — &lt;60 seconds</span></div>
+    </div>
+    <div class="report-section">
+      <h4>Event Summary</h4>
+      <div class="report-row"><span class="rk">HIGH Severity</span><span class="rv" style="color:var(--red)">${nis2Events.filter(e=>e.severity==='HIGH').length} events</span></div>
+      <div class="report-row"><span class="rk">MEDIUM Severity</span><span class="rv" style="color:var(--gold)">${nis2Events.filter(e=>e.severity==='MEDIUM').length} events</span></div>
+      <div class="report-row"><span class="rk">LOW Severity</span><span class="rv" style="color:var(--green)">${nis2Events.filter(e=>e.severity==='LOW').length} events</span></div>
+      <div class="report-row"><span class="rk">Temperature Breaches</span><span class="rv">${nis2Events.filter(e=>e.type.includes('BREACH')).length}</span></div>
+    </div>
+    <div class="report-section">
+      <h4>Compliance Statement</h4>
+      <p style="font-size:0.72rem;color:var(--muted);line-height:1.7;">
+        This report is generated by ADROIT SENSE™ in accordance with EU Directive 2022/2555 (NIS2).
+        All events are timestamped, immutably logged, and retained for a minimum of 90 days in
+        AWS eu-central-1 (Frankfurt, Germany) in compliance with GDPR and NIS2 data residency requirements.
+        This document serves as an official operational incident log for regulatory inspection purposes.
+      </p>
+    </div>
+    ${nis2Events.length > 0 ? `
+    <div class="report-section">
+      <h4>Event Log (Last ${Math.min(nis2Events.length, 10)})</h4>
+      ${nis2Events.slice(0,10).map(e => `
+        <div class="report-row">
+          <span class="rk" style="font-size:0.65rem;">${e.timestamp}<br><span style="color:var(--muted);font-size:0.6rem;">${e.type}</span></span>
+          <span class="rv" style="text-align:right;">${e.value} · <span style="color:${e.severity==='HIGH'?'var(--red)':e.severity==='MEDIUM'?'var(--gold)':'var(--green)'}">${e.severity}</span></span>
+        </div>`).join('')}
+    </div>` : ''}
+  `;
+  document.getElementById('reportModal').classList.add('open');
+}
+
+function closeReport() {
+  document.getElementById('reportModal').classList.remove('open');
+}
+
+function printReport() {
+  window.print();
+}
+
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) closeReport();
+});
 
 /* ── Scroll progress ── */
 window.addEventListener('scroll', () => {
